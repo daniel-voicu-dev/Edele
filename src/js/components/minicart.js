@@ -1,1 +1,1 @@
-export let message = "test";
+export var messageText = "test1234";
