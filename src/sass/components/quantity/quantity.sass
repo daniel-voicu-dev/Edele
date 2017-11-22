@@ -1,0 +1,47 @@
+*
+  box-sizing: border-box
+.eComQuantity
+  position: relative
+  max-width: 5em
+  font-size: 1rem
+  // z-index: 1
+  button 
+    background-color: transparent
+    border: none
+    padding: 0 0.5em
+    margin: 0
+    box-shadow: none
+    line-height: 1.6em
+    display: flex 
+    width: 100%
+    outline: none
+    align-items: center
+    justify-content: center
+    &:focus 
+      box-shadow: none
+      outline: none
+  .quantitySelectValue  
+    border: 1px solid #444
+    width: 100%
+    display: flex 
+    justify-content: flex-end
+    align-items: center
+    .fa 
+      margin-left: 0.5em
+  .quantitySelectDropdown
+    background-color: #fff
+    border: 1px solid #444
+    width: 3em
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: flex-start
+    position: absolute 
+    right: 0
+    top: 1.6em
+    z-index: 2
+    button
+      &:hover
+        background-color: #f1f1f1
+.hidden
+  display: none !important        
