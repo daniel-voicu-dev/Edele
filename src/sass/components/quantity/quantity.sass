@@ -20,12 +20,18 @@
     &:focus 
       box-shadow: none
       outline: none
-  .quantitySelectValue  
+    input
+      &:focus 
+      box-shadow: none
+      outline: none  
+  .quantitySelectValue
     border: 1px solid #444
     width: 100%
     display: flex 
     justify-content: flex-end
     align-items: center
+    height: 1.75em
+    line-height: 1.75em
     .fa 
       margin-left: 0.5em
   .quantitySelectDropdown
@@ -38,10 +44,21 @@
     justify-content: flex-start
     position: absolute 
     right: 0
-    top: 1.6em
+    top: 1.75em
     z-index: 2
     button
       &:hover
         background-color: #f1f1f1
 .hidden
-  display: none !important        
+  display: none !important    
+.input-value 
+  border: 1px solid #444
+  width: 100%
+  display: flex 
+  justify-content: flex-end
+  align-items: center
+  text-align: right
+  padding: 0 0.5rem 
+  height: 1.75em
+  line-height: 1.75em    
+  outline: none 
