@@ -50,7 +50,7 @@ class Quantity extends React.Component {
     document.removeEventListener('click', this.handleClick.bind(this), false);
   } 
   handleChange(evt) {    
-    console.log(parseFloat(evt.target.value));
+    // console.log(parseFloat(evt.target.value));
     this.setState({value: parseFloat(evt.target.value)});    
     // if(parseFloat(evt.target.value) >=10 ) {
     //   this.setState({select: false});
