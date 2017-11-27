@@ -3,27 +3,127 @@ import ReactDOM from 'react-dom';
 
 import './../../sass/components/quantity/quantity.sass';
 
-
+function RenderOption(value){
+  
+  
+}
+class Option extends React.Component {  
+  render() {
+    if (this.props.value === 10) {
+      return (
+        <button key={this.props.value} onClick={() => this.props.onClick()} type="button" value={this.props.value}>{this.props.value}+</button>
+      );
+    } else {
+      return (
+        <button key={this.props.value} onClick={() => this.props.onClick()} type="button" value={this.props.value}>{this.props.value}</button>
+      );
+    }
+    
+  }
+}
 class Quantity extends React.Component {
-  render() {    
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value,     
+      stock: props.stock,
+      name: props.name,
+      open: false,
+      select: true 
+    };    
+  }  
+  
+  handleClick(e) {
+    // ignore clicks on the component itself    
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.setState({open: false});  
+  }
+  componentDidMount() {
+    // add event listener for clicks
+    document.addEventListener('click', this.handleClick.bind(this), false);   
+  }
+
+  componentWillUnmount() {
+    // make sure you remove the listener when the component is destroyed
+    document.removeEventListener('click', this.handleClick.bind(this), false);
+  } 
+  handleChange(evt) {    
+    console.log(parseFloat(evt.target.value));
+    this.setState({value: parseFloat(evt.target.value)});    
+    // if(parseFloat(evt.target.value) >=10 ) {
+    //   this.setState({select: false});
+    // } else {
+    //   this.setState({select: true});
+    // }
+  }
+  handleBlur() {
+    if(parseFloat(this.state.value) >=10 ) {
+      this.setState({select: false});
+    } else {
+      this.setState({select: true});
+    }
+  }
+  handleKeyPress(evt) {
+    //allow only numbers
+    let value = (Array.apply(null, {length: 10}).map(Number.call, Number)).reduce((result, v, k) => { 
+      if((evt.key).includes(v.toString())) {
+        result = [...result, true];
+      }
+      return result;
+    },[]);
+    if(value.length === 0) {
+      evt.preventDefault();
+    }    
+  }
+  updateValue(i) {
+    this.setState({value: parseFloat(i)});
+    this.setState({open: false});  
+    if(parseFloat(i) >=10 ) {
+      this.setState({select: false});
+    } else {
+      this.setState({select: true});
+    }
+    
+  }
+  toggleDropdown() {    
+    this.setState({open: !this.state.open});
+  }
+  renderOption(i){
     return (
-      <div className="eComQuantity">
-        <button className="quantitySelectValue" type="button"><span className="value">1</span> <i className="fa fa-angle-down"></i></button>
-        <div className="quantitySelectDropdown hidden">
-          <button type="button" value="1">1</button>
-          <button type="button" value="2">2</button>
-          <button type="button" value="3">3</button>
-          <button type="button" value="4">4</button>
-          <button type="button" value="5">5</button>
-          <button type="button" value="6">6</button>
-          <button type="button" value="7">7</button>
-          <button type="button" value="8">8</button>
-          <button type="button" value="9">9</button>
-          <button type="button" value="10">10+</button>        
+      <Option key={i} value={i} onClick={() => this.updateValue(i)} />
+    )
+  }
+  renderWithStock(optionArray) {
+    let dropdownClass = this.state.open === false ? "quantitySelectDropdown hidden" : "quantitySelectDropdown";
+    let selectClass = this.state.select === true ?  "quantitySelectValue" : "quantitySelectValue hidden";
+    let inputClass = this.state.select !== true ? "input-value" : "input-value hidden";
+    return (
+      <div className="eComQuantity"  ref={node => this.node = node}>
+        <button className={selectClass} type="button" onClick={() => this.toggleDropdown()}><span className="value">{this.state.value}</span> <i className="fa fa-angle-down"></i></button>
+        <div className={dropdownClass}>
+          {optionArray.map(x => this.renderOption(x))}
         </div>
-        <input className="input-value hidden" type="text" name="TagToSend1" defaultValue="1" />        
+        <input className={inputClass} type="text" name={this.state.name} onKeyPress={(evt) => this.handleKeyPress(evt)} onBlur={()=>this.handleBlur()} onChange={(evt) => this.handleChange(evt)} value={this.state.value} />              
       </div>
     );
+  }
+  renderWithoutStock(optionArray) {
+    return (
+      <div className="eComQuantity" ref={node => this.node = node}>         
+        <p>Unavailable</p>
+      </div>
+    );
+  }
+  render() {        
+    let optionCount = parseFloat(this.state.stock) > 10 ? 10 : parseFloat(this.state.stock);
+    let optionArray = Array.from({length: optionCount}, (v, k) => k+1);     
+    if (optionCount === 0){
+      return this.renderWithoutStock(optionArray);
+    } else {
+      return this.renderWithStock(optionArray);
+    }
   }
 }
 
@@ -32,12 +132,12 @@ class Quantity extends React.Component {
 
 var quantityCollection = document.querySelectorAll('.quantity-input')
 
-quantityCollection.forEach(el => {
-  console.log(el.attributes["data-test"]);
+quantityCollection.forEach(el => {  
   let stock = el.attributes["data-stock"] !== undefined ? el.attributes["data-stock"].value : "0";
   let value = el.attributes["data-value"] !== undefined ? el.attributes["data-value"].value : "1";
+  let name = el.attributes["data-name"] !== undefined ? el.attributes["data-name"].value : "";
   ReactDOM.render(
-    <Quantity stock={stock} value={value} />, el
+    <Quantity stock={stock} value={value} name={name} />, el
   );
 
 });
@@ -45,66 +145,65 @@ quantityCollection.forEach(el => {
 
 
 
-let quantitySelectValueButtons = document.querySelectorAll(".quantitySelectValue");
-quantitySelectValueButtons.forEach(el => {
-  el.addEventListener("click", (e) => {
-    document.querySelectorAll(".quantitySelectDropdown").forEach(el => { el.classList.add("hidden")});
-    let currentValue = e.currentTarget.value;
-    let target =  e.currentTarget.parentNode.querySelector(".quantitySelectDropdown");
-    target.classList.toggle("hidden"); 
-    e.stopImmediatePropagation();  
-  });  
-});
+// let quantitySelectValueButtons = document.querySelectorAll(".quantitySelectValue");
+// quantitySelectValueButtons.forEach(el => {
+//   el.addEventListener("click", (e) => {
+//     document.querySelectorAll(".quantitySelectDropdown").forEach(el => { el.classList.add("hidden")});
+//     let currentValue = e.currentTarget.value;
+//     let target =  e.currentTarget.parentNode.querySelector(".quantitySelectDropdown");
+//     target.classList.toggle("hidden"); 
+//     e.stopImmediatePropagation();  
+//   });  
+// });
 
-let quantitySelectDropdownButtons = document.querySelectorAll(".quantitySelectDropdown button");
-quantitySelectDropdownButtons.forEach(el => {
-  el.addEventListener("click", (e) => {
-    let currentValue = e.currentTarget.value;
-    let target =  e.currentTarget.parentNode.parentNode.querySelector(".quantitySelectValue");
-    let dropdown =  e.currentTarget.parentNode.classList.add("hidden");
-    let realInput = e.currentTarget.parentNode.parentNode.querySelector(".input-value")
-    realInput.innerHTML = currentValue;
-    realInput.value = currentValue;
-    target.querySelector(".value").innerHTML = currentValue;
-    target.value = currentValue;   
-    if (parseFloat(currentValue) > 9) {
-      target.classList.add("hidden");
-      realInput.classList.remove("hidden");
-    }
-  });
-});
-let quantityInput = document.querySelectorAll(".input-value");
-quantityInput.forEach(el => {
-  el.addEventListener("change",(e) => {
-    let currentValue = e.currentTarget.value;
-    let target =  e.currentTarget.parentNode.querySelector(".quantitySelectValue");
-    let realInput = e.currentTarget;
-    e.currentTarget.value = currentValue;
-    e.currentTarget.innerHTML = currentValue;
-    console.log(currentValue);
-    if (parseFloat(currentValue) < 10) {
-      target.querySelector(".value").innerHTML = currentValue;
-      target.value = currentValue;
-      target.classList.remove("hidden");
-      realInput.classList.add("hidden");
-    }
-  });
-});
+// let quantitySelectDropdownButtons = document.querySelectorAll(".quantitySelectDropdown button");
+// quantitySelectDropdownButtons.forEach(el => {
+//   el.addEventListener("click", (e) => {
+//     let currentValue = e.currentTarget.value;
+//     let target =  e.currentTarget.parentNode.parentNode.querySelector(".quantitySelectValue");
+//     let dropdown =  e.currentTarget.parentNode.classList.add("hidden");
+//     let realInput = e.currentTarget.parentNode.parentNode.querySelector(".input-value")
+//     realInput.innerHTML = currentValue;
+//     realInput.value = currentValue;
+//     target.querySelector(".value").innerHTML = currentValue;
+//     target.value = currentValue;   
+//     if (parseFloat(currentValue) > 9) {
+//       target.classList.add("hidden");
+//       realInput.classList.remove("hidden");
+//     }
+//   });
+// });
+// let quantityInput = document.querySelectorAll(".input-value");
+// quantityInput.forEach(el => {
+//   el.addEventListener("change",(e) => {
+//     let currentValue = e.currentTarget.value;
+//     let target =  e.currentTarget.parentNode.querySelector(".quantitySelectValue");
+//     let realInput = e.currentTarget;
+//     e.currentTarget.value = currentValue;
+//     e.currentTarget.innerHTML = currentValue;
+//     console.log(currentValue);
+//     if (parseFloat(currentValue) < 10) {
+//       target.querySelector(".value").innerHTML = currentValue;
+//       target.value = currentValue;
+//       target.classList.remove("hidden");
+//       realInput.classList.add("hidden");
+//     }
+//   });
+// });
 
-document.addEventListener("click", (evt) => {   
-  // document.querySelector(".quantitySelectDropdown").classList.add("hidden");
-  const flyoutElement = document.querySelector(".quantitySelectDropdown");
-  let targetElement = evt.target;
-  // console.dir(flyoutElement, targetElement)
-  do {
-      if (targetElement == flyoutElement) { 
-          return;
-      }          
-      targetElement = targetElement.parentNode;
-  } while (targetElement);    
+// document.addEventListener("click", (evt) => {   
+//   // document.querySelector(".quantitySelectDropdown").classList.add("hidden");
+//   const flyoutElement = document.querySelector(".quantitySelectDropdown");
+//   let targetElement = evt.target;
+//   // console.dir(flyoutElement, targetElement)
+//   do {
+//       if (targetElement == flyoutElement) { 
+//           return;
+//       }          
+//       targetElement = targetElement.parentNode;
+//   } while (targetElement);    
   
-  
-  document.querySelectorAll(".quantitySelectDropdown").forEach(el => { el.classList.add("hidden")});
-  // console.log(flyoutElement);
-});
-
+//   console.log("hide");
+//   document.querySelectorAll(".quantitySelectDropdown").forEach(el => { el.classList.add("hidden")});
+//   // console.log(flyoutElement);
+// });
