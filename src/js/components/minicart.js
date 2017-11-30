@@ -1,1 +1,1 @@
-export var messageText = "test1234";
+export default "test1234";

@@ -1,12 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
+import ReactDOM from 'react-dom'; 
+import Tooltip from '../../../node_modules/tooltip.js/dist/esm/tooltip.js';
 import './../../sass/components/quantity/quantity.sass';
 
-function RenderOption(value){
-  
-  
-}
+
 class Option extends React.Component {  
   render() {
     if (this.props.value === 10) {
@@ -42,23 +39,34 @@ class Quantity extends React.Component {
   }
   componentDidMount() {
     // add event listener for clicks
-    document.addEventListener('click', this.handleClick.bind(this), false);   
+    document.addEventListener('click', this.handleClick.bind(this), false);  
+    const referenceElement = this.node;
+    this.instance = new Tooltip(referenceElement, {
+      placement: 'top', // or bottom, left, right, and variations
+      title: "Quantity unavailable",
+      trigger: "manual"
+    });     
   }
 
   componentWillUnmount() {
     // make sure you remove the listener when the component is destroyed
     document.removeEventListener('click', this.handleClick.bind(this), false);
   } 
-  handleChange(evt) {    
-    // console.log(parseFloat(evt.target.value));
-    this.setState({value: parseFloat(evt.target.value)});    
-    // if(parseFloat(evt.target.value) >=10 ) {
-    //   this.setState({select: false});
-    // } else {
-    //   this.setState({select: true});
-    // }
+  handleChange(evt) {      
+    this.setState({value: parseFloat(evt.target.value)});   
+    console.log(evt.target.value)
+    if(parseFloat(evt.target.value) > parseFloat(this.state.stock)) {
+      this.instance.show();
+    } else {
+      this.instance.hide();
+    }
   }
-  handleBlur() {
+  handleBlur() {    
+    // if(parseFloat(this.state.value) > parseFloat(this.state.stock)) {
+    //   this.instance.show();
+    // } else {
+    //   this.instance.hide();
+    // }
     if(parseFloat(this.state.value) >=10 ) {
       this.setState({select: false});
     } else {
@@ -78,14 +86,19 @@ class Quantity extends React.Component {
     }    
   }
   updateValue(i) {
-    this.setState({value: parseFloat(i)});
-    this.setState({open: false});  
-    if(parseFloat(i) >=10 ) {
-      this.setState({select: false});
-    } else {
-      this.setState({select: true});
-    }
+    // if(parseFloat(i) > parseFloat(this.state.stock)) {
+    //   this.instance.show();
+    // } else {
+    //   this.instance.hide();
     
+      this.setState({value: i});
+      this.setState({open: false});  
+      if(parseFloat(i) >=10 ) {
+        this.setState({select: false});
+      } else {
+        this.setState({select: true});
+      }
+    // }
   }
   toggleDropdown() {    
     this.setState({open: !this.state.open});
@@ -105,7 +118,7 @@ class Quantity extends React.Component {
         <div className={dropdownClass}>
           {optionArray.map(x => this.renderOption(x))}
         </div>
-        <input className={inputClass} type="text" name={this.state.name} onKeyPress={(evt) => this.handleKeyPress(evt)} onBlur={()=>this.handleBlur()} onChange={(evt) => this.handleChange(evt)} value={this.state.value} />              
+        <input className={inputClass} type="text" name={this.state.name} onKeyPress={(evt) => this.handleKeyPress(evt)} onBlur={()=>this.handleBlur()} onChange={(evt) => this.handleChange(evt)} value={this.state.value} />  
       </div>
     );
   }
