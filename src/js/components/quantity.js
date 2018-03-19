@@ -3,10 +3,19 @@ import ReactDOM from 'react-dom';
 import Tooltip from '../../../node_modules/tooltip.js/dist/esm/tooltip.js';
 import './../../sass/components/quantity/quantity.sass';
 
+const getClosestValidValue = (int, step) => {
+  //lowest valid value
+  let value = int;
+  while (value%step !== 0) {
+    value--;
+  }
+  // console.log(value);
+  return value;
+}
 
 class Option extends React.Component {  
   render() {
-    if (this.props.value === 10) {
+    if (this.props.value === 10*this.props.step) {
       return (
         <button key={this.props.value} onClick={() => this.props.onClick()} type="button" value={this.props.value}>{this.props.value}+</button>
       );
@@ -39,6 +48,13 @@ class Quantity extends React.Component {
     }
     this.setState({open: false});  
   }
+  componentWillMount() {
+    if(this.state.value >=10*this.state.step ) {
+      this.setState({select: false});
+    } else {
+      this.setState({select: true});
+    }
+  }
   componentDidMount() {
     // add event listener for clicks
     document.addEventListener('click', this.handleClick.bind(this), false);  
@@ -54,22 +70,32 @@ class Quantity extends React.Component {
     // make sure you remove the listener when the component is destroyed
     document.removeEventListener('click', this.handleClick.bind(this), false);
   } 
-  handleChange(evt) {      
-    this.setState({value: parseFloat(evt.target.value)});   
-    console.log(evt.target.value);
-    if(parseFloat(evt.target.value) > this.state.stock) {
+  handleChange(evt) {     
+    // let value = getClosestValidValue(parseFloat(evt.target.value), this.state.step) <= 0 ? this.state.min : getClosestValidValue(parseFloat(evt.target.value), this.state.step);
+    // console.log(evt.target.value);
+    
+    this.setState({value: evt.target.value !== "" ? evt.target.value : this.state.min});   
+    // console.log(evt.target.value);
+    if(evt.target.value > this.state.stock) {
       this.instance.show();
     } else {
       this.instance.hide();
     }
   }
-  handleBlur() {    
+  handleBlur(evt) {    
     // if(parseFloat(this.state.value) > parseFloat(this.state.stock)) {
     //   this.instance.show();
     // } else {
     //   this.instance.hide();
     // }
-    if(this.state.value >=10 ) {
+    
+    let value = getClosestValidValue(parseFloat(evt.target.value), this.state.step) <= 0 ? this.state.min : getClosestValidValue(parseFloat(evt.target.value), this.state.step);
+    // console.log("current",evt.target.value);
+    // console.log("value", value);
+    this.setState({value});   
+    // console.log(value);
+    // console.log("blur")
+    if(this.state.value >=10*this.state.step ) {
       this.setState({select: false});
     } else {
       this.setState({select: true});
@@ -93,9 +119,10 @@ class Quantity extends React.Component {
     // } else {
     //   this.instance.hide();
     
-      
+      // console.log(i);
+      // console.log("closest value",getClosestValidValue(i, this.state.step));
       this.setState({open: false});  
-      if(parseFloat(i) >=10 ) {
+      if(parseFloat(i) >=10*this.state.step ) {
         this.setState({value: i});
         this.setState({select: false});
       } else {
@@ -109,7 +136,7 @@ class Quantity extends React.Component {
   }
   renderOption(i){
     return (
-      <Option key={i} value={i} onClick={() => this.updateValue(i)} />
+      <Option key={i} value={i} onClick={() => this.updateValue(i)} step={this.state.step} />
     )
   }
   renderWithStock(optionArray) {
@@ -122,7 +149,7 @@ class Quantity extends React.Component {
         <div className={dropdownClass}>
           {optionArray.map(x => this.renderOption(x))}
         </div>
-        <input className={inputClass} type="text" name={this.state.name} onKeyPress={(evt) => this.handleKeyPress(evt)} onBlur={()=>this.handleBlur()} onChange={(evt) => this.handleChange(evt)} value={this.state.value} />  
+        <input className={inputClass} type="text" name={this.state.name} onKeyPress={(evt) => this.handleKeyPress(evt)} onBlur={(evt)=>this.handleBlur(evt)} onChange={(evt) => this.handleChange(evt)} value={this.state.value} />  
       </div>
     );
   }
@@ -134,10 +161,10 @@ class Quantity extends React.Component {
     );
   }
   render() {        
-    let optionCount = this.state.stock > 10 ? 10 : this.state.stock;
-    let optionArray = Array.from({length: optionCount}, (v, k) => k+1).filter(val => val >= this.state.min).filter(val => val % this.state.step === 0 || val === 10);     
+    let optionCount = this.state.stock > 10*this.state.step ? 10*this.state.step : this.state.stock;
+    let optionArray = Array.from({length: 10}, (v, k) => k+1).map(val => val*this.state.step).filter(val => val > this.state.min && val <= this.state.stock);     
     console.log(optionArray);
-    if (optionCount === 0){
+    if (optionCount === 0 || optionCount < this.state.min){
       return this.renderWithoutStock(optionArray);
     } else {
       return this.renderWithStock(optionArray);
