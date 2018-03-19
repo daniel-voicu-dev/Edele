@@ -22,9 +22,11 @@ class Quantity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value,     
-      stock: props.stock,
+      value: parseFloat(props.value),     
+      stock: parseFloat(props.stock),
       name: props.name,
+      min: parseFloat(props.min),
+      step: parseFloat(props.step),
       open: false,
       select: true 
     };    
@@ -54,8 +56,8 @@ class Quantity extends React.Component {
   } 
   handleChange(evt) {      
     this.setState({value: parseFloat(evt.target.value)});   
-    console.log(evt.target.value)
-    if(parseFloat(evt.target.value) > parseFloat(this.state.stock)) {
+    console.log(evt.target.value);
+    if(parseFloat(evt.target.value) > this.state.stock) {
       this.instance.show();
     } else {
       this.instance.hide();
@@ -67,7 +69,7 @@ class Quantity extends React.Component {
     // } else {
     //   this.instance.hide();
     // }
-    if(parseFloat(this.state.value) >=10 ) {
+    if(this.state.value >=10 ) {
       this.setState({select: false});
     } else {
       this.setState({select: true});
@@ -91,11 +93,13 @@ class Quantity extends React.Component {
     // } else {
     //   this.instance.hide();
     
-      this.setState({value: i});
+      
       this.setState({open: false});  
       if(parseFloat(i) >=10 ) {
+        this.setState({value: i});
         this.setState({select: false});
       } else {
+        this.setState({value: i});
         this.setState({select: true});
       }
     // }
@@ -130,8 +134,9 @@ class Quantity extends React.Component {
     );
   }
   render() {        
-    let optionCount = parseFloat(this.state.stock) > 10 ? 10 : parseFloat(this.state.stock);
-    let optionArray = Array.from({length: optionCount}, (v, k) => k+1);     
+    let optionCount = this.state.stock > 10 ? 10 : this.state.stock;
+    let optionArray = Array.from({length: optionCount}, (v, k) => k+1).filter(val => val >= this.state.min).filter(val => val % this.state.step === 0 || val === 10);     
+    console.log(optionArray);
     if (optionCount === 0){
       return this.renderWithoutStock(optionArray);
     } else {
@@ -149,8 +154,10 @@ quantityCollection.forEach(el => {
   let stock = el.attributes["data-stock"] !== undefined ? el.attributes["data-stock"].value : "0";
   let value = el.attributes["data-value"] !== undefined ? el.attributes["data-value"].value : "1";
   let name = el.attributes["data-name"] !== undefined ? el.attributes["data-name"].value : "";
+  let min = el.attributes["data-min"] !== undefined ? el.attributes["data-min"].value : "1";
+  let step = el.attributes["data-step"] !== undefined ? el.attributes["data-step"].value : "1";
   ReactDOM.render(
-    <Quantity stock={stock} value={value} name={name} />, el
+    <Quantity stock={stock} value={value} name={name} min={min} step={step} />, el
   );
 
 });
