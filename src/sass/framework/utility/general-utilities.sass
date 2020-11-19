@@ -7,7 +7,13 @@
 .box-shadow
   --box-shadow: #00000021 0 0 15px 0
   box-shadow: var(--box-shadow)
-  
+.lazyload,.lazyloading 
+  opacity: 0  
+.lazyloaded 
+  opacity: 1
+  transition: opacity 500ms ease-in
+img.lazyload:not([src]) 
+  visibility: hidden  
 .icon-xs
   --icon-size: 1.2rem
 .icon-sm

@@ -1,4 +1,5 @@
 import "./app.sass"
+import "lazysizes"
 import "./js/index"
 console.log("It Works")
 

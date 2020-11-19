@@ -68,12 +68,12 @@ class LitHeading extends LitElement {
     </div>
     
     </div>
-    ${RenderEditingArea({value:this.value, cssclass: `${this.styling} weight-${this.weight} color-${this.color} ${this.cssclass} `})}
+    <lit-edit value="${this.value}" cssclass="${this.styling} weight-${this.weight} color-${this.color} ${this.cssclass}"></lit-edit> 
     </div>    
     ` : 
     html`
     <div class="relative">
-      <button @click="${e=>this.config = !this.config}" type="button" class="btn-icon btn-icon--config absolute l-0 t-0 ${this.config ? "hidden":""}"><div class="ico"><svg xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 512 512'><path d='M256 464c-114.69 0-208-93.31-208-208S141.31 48 256 48s208 93.31 208 208-93.31 208-208 208z'/></svg></div></button>
+      <button @click="${e=>this.config = !this.config}" type="button" class="btn-icon btn-icon--config ${this.config ? "hidden":""}"><div class="ico"><svg xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 512 512'><path d='M256 464c-114.69 0-208-93.31-208-208S141.31 48 256 48s208 93.31 208 208-93.31 208-208 208z'/></svg></div></button>
        ${unsafeHTML(markup)}
     </div>
      

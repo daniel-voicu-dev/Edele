@@ -1,5 +1,4 @@
 import { LitElement, html } from 'lit-element';
-import RenderEditingArea from "./lit-edit-text"
 import RenderOption from "./lit-option"
 class LitParagraps extends LitElement {
   static get properties() {
@@ -33,15 +32,13 @@ class LitParagraps extends LitElement {
      */
     return this;
   }
-
-  updated() {
-    console.log(this.value)
-  }  
+  
 
   render() {
     let colorArray=["default", "brand","accent","light","dark","muted"]
     let sizeArray=["default", "xs","sm","md","lg","xl"]
     let weightArray=["default","superthin","thin","normal","bold","superbold"];
+    let normalizedContent = this.value.join("&#10;");
     return this.config ?  html`
     <div class="config relative">    
     <div class="absolute b-100 p-2 bg-light config__container">
@@ -58,11 +55,11 @@ class LitParagraps extends LitElement {
     </div>
     
     </div>
-    ${RenderEditingArea({value:this.value, cssclass: `weight-${this.weight} font-${this.size} color-${this.color} ${this.cssclass} `})}
+    <lit-edit value="${normalizedContent}" cssclass="weight-${this.weight} font-${this.size} color-${this.color} ${this.cssclass}"></lit-edit>    
     </div>    
     ` : html`
     <div class="relative">
-      <button @click="${e=>this.config = !this.config}" type="button" class="btn-icon btn-icon--config absolute l-0 t-0 ${this.config ? "hidden":""}"><div class="ico"><svg xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 512 512'><path d='M256 464c-114.69 0-208-93.31-208-208S141.31 48 256 48s208 93.31 208 208-93.31 208-208 208z'/></svg></div></button>
+      <button @click="${e=>this.config = !this.config}" type="button" class="btn-icon btn-icon--config ${this.config ? "hidden":""}"><div class="ico"><svg xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 512 512'><path d='M256 464c-114.69 0-208-93.31-208-208S141.31 48 256 48s208 93.31 208 208-93.31 208-208 208z'/></svg></div></button>
       <div class="${this.color} weight-${this.weight} font-${this.size} ${this.cssclass} ">${this.value.map(el=>html`<p>${el}</p>`)}</div>
       </div>`
   }  
