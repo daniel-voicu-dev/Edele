@@ -1,0 +1,31 @@
+@use "./../variables"
+@use "./../mixins"
+@use "sass:math"
+@use "sass:map"
+
+\:root 
+
+  --font-family-headings: "Montserrat", "Georgia", serif
+  --font-family-hero: var(--font-family-headings)
+  --font-family-headings-secondary: "Lora", "Georgia",serif  
+  --font-family-main: "Hind Madurai","Verdana", sans-serif
+  --font-stack-main: normal 400 1.6rem/1.4 var(--font-family-main)
+  
+p
+  margin: 0 0 0.5rem
+@for $i from -1 through 4
+  .#{h}#{5 - $i}, #{h}#{5-$i}
+    font-family: var(--font-family-headings, var(--font-stack-main))
+    font-weight: var(--weight-bold, 700)    
+    font-size: clamp(#{(map.get(variables.$mobileTypoScale, "base") * math.pow(map.get(variables.$mobileTypoScale, "ratio"), $i))}#{"rem"} , #{map.get(variables.$typoScale, "base") * math.pow(map.get(variables.$typoScale, "ratio"),$i)}#{"rem"},  #{(map.get(variables.$typoScale, "base") * math.pow(map.get(variables.$typoScale, "ratio"),$i))*1000/511}#{"vw"})
+    margin: 0
+@for $i from 5 through 6
+  .hr#{7-$i}
+    font-family: var(--font-family-hero)
+    font-weight: var(--weight-superbold, 900)    
+    font-size: clamp(#{(map.get(variables.$mobileTypoScale, "base") * math.pow(map.get(variables.$mobileTypoScale, "ratio"), $i))}#{"rem"} , #{map.get(variables.$typoScale, "base") * math.pow(map.get(variables.$typoScale, "ratio"),$i)}#{"rem"},  #{(map.get(variables.$typoScale, "base") * math.pow(map.get(variables.$typoScale, "ratio"),$i))*1000/511}#{"vw"})    
+    margin: 0
+    line-height: 1
+   
+
+  

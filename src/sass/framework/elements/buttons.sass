@@ -1,0 +1,129 @@
+@use "./../variables"
+
+\:root  
+  --button-font-family: "Roboto Condensed", sans-serif
+button, .btn
+  user-select: none
+  --icon-size: 1.6rem
+  margin: 0
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  line-height: calc(var(--button-line-height, 4rem) - 2*var(--button-border-size, 0rem))
+  border: var(--button-border-size, 0rem) solid var(--button-border-color)
+  min-width: var(--button-line-height, 4rem)
+  padding: 0 var(--button-padding, 2rem)
+  background: var(--button-bg, var(--color-muted))
+  color: var(--button-color, var(--color-content))
+  border-radius: var(--border-radius, 0rem)
+  text-decoration: none
+  outline: none
+  transition: var(--transition, all 0s linear)
+  cursor: pointer
+  vertical-align: bottom  
+  font-family: var(--button-font-family, sans-serif) 
+  &:hover
+    background: var(--button-bg-hover, var(--button-bg))
+    color: var(--button-color-hover, var(--button-color))
+    border-color: var(--button-border-color-hover, var(--button-border-color))
+    --icon-color: var(--button-color-hover, var(--button-color))
+  .icon
+    display: inline-flex
+    align-items: center
+    justify-content: center
+  &[icon-position="left"]
+    span:not(.icon)
+      order: 2
+    .icon
+      order: 1
+      margin-right: var(--icon-spacing, 1rem)
+  &[icon-position="right"]
+    .icon
+      margin-left: var(--icon-spacing, 1rem)
+  &.disabled
+    opacity: 0.2
+    cursor: not-allowed
+.btn-icon
+  --button-padding: 0
+  --button-bg: transparent
+  --icon-size: 1.6rem
+  height: calc(var(--button-line-height, 4rem))
+  width: calc(var(--button-line-height, 4rem))  
+.btn-link 
+  height: unset 
+  width: unset
+  line-height: inherit
+  --button-bg: transparent 
+  --button-bg-hover: transparent
+  --button-padding: 0rem
+  min-width: unset
+
+//button creation  
+@each $key, $value in variables.$darkThemedButtons
+  .btn-fill--#{$key}
+    --button-bg: var(--color-#{$key})
+    --button-bg-hover: var(--color-#{$value})
+    --button-color: var(--color-light)
+    --button-color-hover: var(--color-light)
+    --icon-color: var(--color-light)
+    .ico
+      --transition: all 0s linear
+  .btn-border--#{$key}
+    --button-bg: transparent
+    --button-bg-hover: var(--color-#{$key})
+    --button-color:  var(--color-#{$key})
+    --button-color-hover: var(--color-light)
+    --button-border-size: var(--border-size, 0.1rem)
+    --button-border-color: var(--color-#{$key})
+    --button-border-color-hover: var(--color-#{$key})
+    --icon-color: var(--color-#{$key})
+    .ico
+      --transition: all 0s linear
+  .btn-icon--#{$key}   
+    --button-color: var(--color-#{$key})
+    --icon-color: var(--color-#{$key})
+    --button-color-hover: var(--color-#{$value})
+    --icon-size: 3.2rem
+    // --icon-color: var(--color-#{$key})
+    // --icon-color-hover: var(--color-#{$value})
+
+@each $key, $value in variables.$lightThemedButtons
+  .btn-fill--#{$key}
+    --button-bg: var(--color-#{$key})
+    --button-bg-hover: var(--color-#{$value}) 
+    --button-color: var(--color-dark)
+    --button-color-hover: var(--color-light)
+    --icon-color: var(--color-dark)
+    .ico
+      --transition: all 0s linear
+    &:hover 
+      --icon-color: var(--color-light)
+  .btn-border--#{$key}
+    --button-bg: transparent
+    --button-bg-hover: var(--color-dark)
+    --button-color:  var(--color-#{$key})
+    --button-color-hover: var(--color-light)
+    --button-border-size: var(--border-size, 0.1rem)
+    --button-border-color: var(--color-#{$key})
+    --button-border-color-hover: var(--color-dark)
+    --icon-color: var(--color-#{$key})
+    .ico
+      --transition: all 0s linear
+  .btn-icon--#{$key}    
+    --button-color: var(--color-#{$key})
+    --icon-color: var(--color-#{$key})
+    --button-color-hover: var(--color-#{$value})
+    --icon-size: 3.2rem
+    // --icon-color: var(--color-#{$key})
+    // --icon-color-hover: var(--color-#{$value})
+
+.btn-md
+  --button-line-height: 3rem 
+.btn-sm 
+  --button-line-height: 2.4rem
+.btn-xs 
+  --button-line-height: 2rem
+.btn-inline 
+  min-width: 1px
+  width: auto      
+  

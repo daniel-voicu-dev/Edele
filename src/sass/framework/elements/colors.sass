@@ -1,0 +1,15 @@
+@use "./../variables"
+@use "sass:map"
+
+$grays: map.merge(variables.$lightgrays, variables.$darkgrays)
+$colors1: map.merge(variables.$themeColors, variables.$alert)
+$colors2: map.merge($colors1, variables.$basic)
+$colors3: map.merge($colors2, variables.$inheritedColors)
+$colors4: map.merge($colors3, variables.$availability)
+$colors5: map.merge($colors4, $grays)
+
+\:root
+  @each $key, $value in $colors5
+    --color-#{$key}: #{$value}  
+
+

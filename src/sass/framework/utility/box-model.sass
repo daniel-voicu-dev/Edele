@@ -1,0 +1,113 @@
+@use "./../variables"
+
+//spacings default values: [1:1,2:2,3:4,4:6,5:12] => 0.5rem/1rem/2rem/3rem/6rem
+.mx-auto
+  margin-left: auto
+  margin-right: auto
+.mr-auto
+  margin-right: auto
+.ml-auto
+  margin-left: auto  
+@each $key, $value in variables.$spacings  
+  .mx-#{$key}
+    margin-left: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    margin-right: calc(#{$value} * var(--spacing-unit, 0.5rem))
+  .my-#{$key}
+    margin-top: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    margin-bottom: calc(#{$value} * var(--spacing-unit, 0.5rem))
+  .px-#{$key}
+    padding-left: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    padding-right: calc(#{$value} * var(--spacing-unit, 0.5rem))
+  .py-#{$key}
+    padding-top: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    padding-bottom: calc(#{$value} * var(--spacing-unit, 0.5rem))
+@each $key2, $value2 in variables.$breakpoints    
+  @each $key, $value in variables.$spacings     
+    .mx-#{$key2}-#{$key}
+      @media (min-width: #{$value2})
+        margin-left: calc(#{$value} * var(--spacing-unit, 0.5rem))
+        margin-right: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    .my-#{$key2}-#{$key}
+      @media (min-width: #{$value2})
+        margin-top: calc(#{$value} * var(--spacing-unit, 0.5rem))
+        margin-bottom: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    .px-#{$key2}-#{$key}
+      @media (min-width: #{$value2})
+        padding-left: calc(#{$value} * var(--spacing-unit, 0.5rem))
+        padding-right: calc(#{$value} * var(--spacing-unit, 0.5rem))
+    .py-#{$key2}-#{$key}
+      @media (min-width: #{$value2})
+        padding-top: calc(#{$value} * var(--spacing-unit, 0.5rem))
+        padding-bottom: calc(#{$value} * var(--spacing-unit, 0.5rem)) 
+@each $key, $value in variables.$spacings
+  @each $item, $itemValue in variables.$spacingVariationBuilder 
+    //rules for childrens   
+    .child-#{$item}-#{$key} 
+      > *          
+        #{$itemValue}: calc(#{$value} * var(--spacing-unit, 0.5rem))
+        @if $item == mr
+          &:last-child
+            #{$itemValue}: 0
+        @if $item == mb
+          &:last-child
+            #{$itemValue}: 0    
+        @else if $item == ml
+          &:first-child
+            #{$itemValue}: 0
+        @else if $item == mt
+          &:first-child
+            #{$itemValue}: 0
+    .#{$item}-#{$key}
+      #{$itemValue}: calc(#{$value} * var(--spacing-unit, 0.5rem))
+@each $key2, $value2 in variables.$breakpoints
+  @each $key, $value in variables.$spacings
+    @each $item, $itemValue in variables.$spacingVariationBuilder      
+      //rules for childrens       
+      .child-#{$item}-#{$key2}-#{$key}
+        > *
+          @media (min-width: #{$value2})
+            #{$itemValue}: calc(#{$value} * var(--spacing-unit, 0.5rem))
+            @if $item == mr
+              &:last-child
+                #{$itemValue}: 0
+            @if $item == mb
+              &:last-child
+                #{$itemValue}: 0    
+            @else if $item == ml
+              &:first-child
+                #{$itemValue}: 0
+            @else if $item == mt
+              &:first-child
+                #{$itemValue}: 0
+      .#{$item}-#{$key2}-#{$key}
+        @media (min-width: #{$value2})
+          #{$itemValue}: calc(#{$value} * var(--spacing-unit, 0.5rem))    
+.border
+  border: 1px solid var(--color-border)          
+.border-top 
+  border-top: var(--border-size, 0.1rem) solid var(--color-border)
+.border-bottom
+  border-bottom: var(--border-size, 0.1rem) solid var(--color-border)
+.border-left
+  border-left: var(--border-size, 0.1rem) solid var(--color-border)
+.border-right
+  border-right: var(--border-size, 0.1rem) solid var(--color-border)  
+.border-pill 
+  border-radius: 1.6rem !important
+.border-circle
+  border-radius: 100% !important  
+@for $i from 1 through 5
+  .border-#{$i}    
+    border-width: #{"0."}#{$i}rem !important    
+.border-top-0 
+  border-top: none !important
+.border-bottom-0
+  border-bottom: none !important
+.border-left-0
+  border-left: none !important
+.border-right-0
+  border-right: none !important
+.border-0
+  border: none !important
+
+  

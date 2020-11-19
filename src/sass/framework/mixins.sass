@@ -1,0 +1,21 @@
+@use "./variables.sass"
+@use "sass:map"
+
+=breakpoint($breakpoint)
+  @media (min-width: map.get(variables.$breakpoints,$breakpoint))
+    @content
+=placeholder
+  &::-webkit-input-placeholder 
+    @content
+  &:-moz-placeholder           
+    @content
+  &::-moz-placeholder          
+    @content
+  &:-ms-input-placeholder      
+    @content
+=ellipsis
+  display: inline-block 
+  max-width: 100%
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap    

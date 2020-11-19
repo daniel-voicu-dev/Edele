@@ -1,0 +1,45 @@
+@use "./sass/index.sass"
+@import url('https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;700&family=Lora:ital,wght@0,400;1,400;1,700&family=Montserrat:wght@100;300;400;700;800;900&display=swap')
+\:root
+  --color-platform: #00ceff
+  --color-content: #020437
+.btn-icon--config 
+  --icon-color: var(--color-platform)
+  --button-line-height: 1.4rem
+  --icon-size: 1.2rem
+  background-color:#ffffffe6
+  // background: linear-gradient(#007dff, #954ffd)
+  box-shadow: 0px 4px 8px 0px #2000506e
+  border-radius: 100%  
+  // .ico 
+  //   transition: var(--transition, all 0.2s ease-in-out)
+  &:hover 
+    --icon-color: var(--color-platform)
+    background-color: #fff 
+    // .ico 
+    //   transform: rotate(120deg)
+.config
+  &__container 
+    box-shadow: 0px 4px 8px 0px #6b6b6b6e
+    border-radius: 0.5rem
+    border: 2px solid var(--color-platform)      
+  &__close
+    top: -1rem
+    right: -1rem
+    background-color: var(--color-platform)
+    border-radius: 100%     
+    transition: var(--transition, all 0.2s ease-in-out) 
+    --icon-color: var(--color-light)
+    &:hover 
+      background-color: var(--color-platform)
+      transform: rotate(180deg)
+textarea   
+  &.editing      
+    width: 100% !important
+    max-width: 100%
+    border: 1px dashed gray
+    &:focus 
+      outline: dashed
+      outline-color: #000
+      outline-width: 2px
+      border-color: transparent

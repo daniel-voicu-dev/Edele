@@ -1,0 +1,70 @@
+@use "../mixins"
+.section
+  &__container
+    display: grid
+    grid-template-columns: auto var(--container, 1fr) auto
+    height: var(--height, auto)
+    width: 100%
+    &.height-lg
+      --height: unset
+      +mixins.breakpoint(md)
+        --height: 60rem
+        --height: unset
+    &.height-xl
+      --height: 80rem
+      --height: unset
+    &.height-md
+      --height: 40rem
+      --height: unset
+    &.height-sm
+      --height: 20rem
+      --height: unset
+    &.height-auto
+      --height: auto
+      --height: unset
+    &.height-screen
+      --height: 100vh
+  &__backdrop
+    grid-area: 1/1/1/-1
+    z-index: -1
+    max-height: var(--height)
+    overflow: hidden
+    .opacity-bg
+      position: absolute
+      top: 0
+      bottom: 0
+      left: 0
+      right: 0
+      background: rgba(0, 0, 0, 0.3)
+    > video, img
+      object-fit: cover
+    &.backdrop-container
+      grid-area: 1/2/-1/3
+  &__content
+    grid-area: 1/2/1/3
+    padding: var(--container-top-spacing, 0rem) var(--grid-gap) var(--container-bottom-spacing, 0rem)    
+.container
+  --container: calc(100vw - var(--scrollbar-width, 4rem))
+  +mixins.breakpoint(md)
+    --container: calc(1024px - var(--scrollbar-width, 4rem))
+  +mixins.breakpoint(lg)
+    --container: calc(1280px - var(--scrollbar-width, 4rem))
+  +mixins.breakpoint(xl)
+    --container: calc(1440px - var(--scrollbar-width, 4rem))
+  +mixins.breakpoint(xxl)
+    --container: calc(1920px - var(--scrollbar-width, 4rem))
+  &--narrow
+    --container: calc(100vw - var(--scrollbar-width, 4rem))
+    +mixins.breakpoint(md)
+      --container: calc(1024px - var(--scrollbar-width, 4rem))
+    +mixins.breakpoint(lg)
+      --container: calc(1280px - var(--scrollbar-width, 4rem))
+    +mixins.breakpoint(xl)
+      --container: calc(1300px - var(--scrollbar-width, 4rem))
+    +mixins.breakpoint(xxl)
+      --container: calc(1300px - var(--scrollbar-width, 4rem))
+  &--wide
+    --container: calc(100vw - var(--scrollbar-width, 4rem))
+    .section__content
+      padding-left: 0
+      padding-right: 0

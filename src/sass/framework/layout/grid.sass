@@ -1,0 +1,23 @@
+@use "./../variables"
+@use "./../mixins"
+
+//columns        
+@for $i from 1 through variables.$grid-columns
+  .col-#{$i}
+    grid-column: span #{$i}
+//columns with breakpoints    
+@each $key, $value in variables.$breakpoints
+  @for $i from 1 through variables.$grid-columns
+    .col-#{$key}-#{$i}
+      @media(min-width: #{$value})
+        grid-column: span #{$i} 
+//grid gap
+@each $key, $value in variables.$spacings
+  .gap-#{$key}   
+      --grid-gap: calc(#{$value} * var(--spacing-unit, 0.5rem))  
+//grid gap with breakpoints      
+@each $key, $value in variables.$spacings      
+  @each $key2, $value2 in variables.$breakpoints
+    .gap-#{$key2}-#{$key}
+      @media (min-width: #{$value2})
+        --grid-gap: calc(#{$value} * var(--spacing-unit, 0.5rem))  

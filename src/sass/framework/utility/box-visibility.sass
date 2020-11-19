@@ -1,0 +1,114 @@
+@use "./../variables"
+.inline-block
+  display: inline-block
+.block
+  display: block
+.inline-flex
+  display: inline-flex
+  flex-wrap: wrap
+.flex
+  display: flex
+.flex-wrap
+  display: flex
+  flex-wrap: wrap
+.grid  
+  display: grid  
+  column-gap: var(--grid-gap, 0rem)
+//grid  
+@for $i from 1 through variables.$grid-columns
+  .grid-#{$i}
+    display: grid
+    grid-gap: var(--grid-gap, 0rem)
+    grid-template-columns: repeat(var(--grid-cols), minmax(0,1fr))
+    --grid-cols: #{$i}
+.hidden
+  display: none
+@each $key, $value in variables.$breakpoints    
+  .inline-block-#{$key}
+    @media (min-width: #{$value})
+      display: inline-block 
+  .block-#{$key}
+    @media (min-width: #{$value})
+      display: block
+  .inline-flex-#{$key}
+    @media (min-width: #{$value})
+      display: inline-flex
+  .flex-#{$key}
+    @media (min-width: #{$value})
+      display: flex   
+  .flex-wrap-#{$key}
+    @media (min-width: #{$value})
+      display: flex 
+      flex-wrap: wrap
+  .grid-#{$key}
+    @media(min-width: #{$value})
+      display: grid 
+      column-gap: var(--grid-gap, 0rem)
+//grid with breakpoints    
+@each $key, $value in variables.$breakpoints
+  @for $i from 1 through variables.$grid-columns
+    .grid-#{$key}-#{$i}
+      @media(min-width: #{$value})
+        display: grid
+        grid-gap: var(--grid-gap, 0rem)
+        grid-template-columns: repeat(var(--grid-cols), minmax(0,1fr))
+        --grid-cols: #{$i}
+@each $key, $value in variables.$breakpoints
+  .hidden-#{$key}
+    @media (min-width: #{$value})
+      display: none
+.hide
+  display: none !important
+.hidden-print
+  @media print 
+    display: none !important
+.block-print
+  display: none !important 
+  @media print 
+    display: block !important
+.overflow-hidden 
+  overflow: hidden 
+.overflow-visible 
+  overflow: visible 
+.overflow-x-hidden
+  overflow-x: hidden 
+.overflow-x-auto
+  overflow-x: auto 
+.overflow-y-hidden 
+  overflow-y: hidden 
+.overflow-y-auto 
+  overflow-y: auto   
+.z-unset 
+  z-index: unset    
+
+@for $i from -1 through 10
+  .order-#{$i}
+    order: #{$i}
+  .z-#{$i}
+    z-index: #{$i}
+@each $key, $value in variables.$breakpoints
+  @for $i from -1 through 10
+    .order-#{$key}-#{$i}
+      @media (min-width: #{$value})
+        order: #{$i}
+  .order-#{$key}-unset
+    @media (min-width: #{$value})
+      order: unset  
+.opacity-0
+  opacity: 0 
+.opacity-1  
+  opacity: 1
+  
+@for $i from 1 through 10
+  .row-start-#{$i}
+    grid-row-start: #{$i}
+  .row-end-#{$i}
+    grid-row-end: #{$i}
+  .column-start-#{$i}
+    grid-column-start: #{$i}
+  .column-end-#{$i}
+    grid-column-end: #{$i}    
+    
+
+
+        

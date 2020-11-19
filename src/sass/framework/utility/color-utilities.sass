@@ -1,0 +1,18 @@
+@use "./../variables"
+
+@each $color in variables.$textColors
+  .color-#{$color}
+    color: var(--color-#{$color})
+    --link-color: var(--color-#{$color})
+    --icon-color: var(--color-#{$color})
+  .hover-#{$color}   
+    &:hover
+      color: var(--color-#{$color})
+      --link-color: var(--color-#{$color})
+  .icon-hover-#{$color}   
+    &:hover
+      --icon-color: var(--color-#{$color})  
+  .border-#{$color}
+    border-color: var(--color-#{$color}) !important
+  .bg-#{$color}
+    background: var(--color-#{$color})
